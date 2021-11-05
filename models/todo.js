@@ -1,26 +1,23 @@
-const { DataTypes } = require('sequelize')
+const { model, Schema } = require('mongoose')
 
-module.exports = (sequelize) => {
-    
-    const model = sequelize.define('todo', {
-        title: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        description: {
-            type: DataTypes.STRING,
-            allowNull: true
-        },
-        priority: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        completed: {
-            type: DataTypes.BOOLEAN,
-            allowNull: false,
-            defaultValue: 0
-        }
-    })
-
-    return model
-}
+module.exports = model('todos', new Schema({
+    title: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    description: {
+        type: String,
+        required: false,
+        trim: true
+    },
+    priority: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    completed: {
+        type: Boolean,
+        required: false
+    }
+}))

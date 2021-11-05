@@ -15,11 +15,6 @@ if (process.env.DB_USER && process.env.DB_PASSWORD) {
     databaseConnectionString = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`
 }
  
-// Carga de modelos  ----------------------------------------------------------------------------------- //
-// Se pasa sequelize como parametro para la definicion del modelo
-const userModel = require('./models/user')(sequelize)
-const todoModel = require('./models/todo')(sequelize)
-
 // Creacion de app express ---------------------------------------------------------------------------- //
 
 const app = express()
@@ -51,19 +46,19 @@ const updateTodo = require('./controllers/todos/update')
 // Definicion de rutas -------------------------------------------------------------------------------- //
 
 // Users (Loguear y registrar usuarios en el sistema)
-app.post('/login', login(sequelize))
-app.post('/registro', register(sequelize))
-app.get('/admin/users', checkIfTheUserHasCredentials, getAllUsers(sequelize))
+app.post('/login', login)
+app.post('/registro', register)
+app.get('/admin/users', checkIfTheUserHasCredentials, getAllUsers)
 
 // Todos
-app.get('/todos', checkIfTheUserHasCredentials, getAllTodos(sequelize))
-app.get('/todos/:id', checkIfTheUserHasCredentials, getTodoById(sequelize))
-app.post('/todos', checkIfTheUserHasCredentials, createTodo(sequelize))
-app.delete('/todos/:id', checkIfTheUserHasCredentials, deleteTodo(sequelize))
-app.put('/todos/:id', checkIfTheUserHasCredentials, updateTodo(sequelize))
+app.get('/todos', checkIfTheUserHasCredentials, getAllTodos)
+app.get('/todos/:id', checkIfTheUserHasCredentials, getTodoById)
+app.post('/todos', checkIfTheUserHasCredentials, createTodo)
+app.delete('/todos/:id', checkIfTheUserHasCredentials, deleteTodo)
+app.put('/todos/:id', checkIfTheUserHasCredentials, updateTodo)
 
 // Usa las credenciales del string definido arriba para conectar
-mongoose.connect(databaseConnectionString, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
+mongoose.connect(databaseConnectionString, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     // Comenzar a escuchar por conexiones
     app.listen(process.env.API_PORT)
