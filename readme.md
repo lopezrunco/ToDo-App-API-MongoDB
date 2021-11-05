@@ -18,6 +18,9 @@ DB_PASSWORD=root
 # Instalar dependencias
 npm i
 
+# Insertar datos de prueba
+npm run seed
+
 # Iniciar API
 npm start
 ```

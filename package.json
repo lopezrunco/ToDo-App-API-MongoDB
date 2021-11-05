@@ -2,7 +2,8 @@
   "name": "todos-api-mongodb",
   "version": "1.0.0",
   "scripts": {
-    "start": "nodemon api.js"
+    "start": "nodemon api.js",
+    "seed": "node seeder.js"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
