@@ -1,21 +1,20 @@
 // Carga todas las variables de entorno usando la biblioteca dotenv
 require('dotenv').config()
 
-const { Sequelize } = require('sequelize')
+
+const mongoose = require('mongoose') // Mongoose (equivalente a Sequelize) es un mapeador para mongoDB
 const express = require('express')
 const cors = require('cors')
 
 // Conexion a base de datos ---------------------------------------------------------------------------- //
-
-const sequelize = new Sequelize({
-  dialect: 'mysql',
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
-  database: process.env.DB_NAME,
-  username: process.env.DB_USER,
-  password: process.env.DB_PASSWORD
-})
-
+// Dependiendo de si hay usuario y password crea un string, si no, otro
+let databaseConnectionString
+if (process.env.DB_USER && process.env.DB_PASSWORD) {
+    databaseConnectionString = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}/${process.env.DB_NAME}?retryWrites=true&w=majority`
+} else {
+    databaseConnectionString = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`
+}
+ 
 // Carga de modelos  ----------------------------------------------------------------------------------- //
 // Se pasa sequelize como parametro para la definicion del modelo
 const userModel = require('./models/user')(sequelize)
@@ -63,19 +62,11 @@ app.post('/todos', checkIfTheUserHasCredentials, createTodo(sequelize))
 app.delete('/todos/:id', checkIfTheUserHasCredentials, deleteTodo(sequelize))
 app.put('/todos/:id', checkIfTheUserHasCredentials, updateTodo(sequelize))
 
-
-// Funcion asincrona, primero se autentica y solo despues corre el codigo. Si no se autentica, arroja error.
-sequelize
-  .authenticate()
+// Usa las credenciales del string definido arriba para conectar
+mongoose.connect(databaseConnectionString, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
   .then(() => {
-    // Sincroniza los modelos con la base de datos (Crea las tablas si no existen)
-    sequelize
-      .sync({ alter: true })
-      .then(() => {
-        // Comenzar a escuchar por conexiones
-        app.listen(process.env.API_PORT)
-      })
-  })
-  .catch(error => {
+    // Comenzar a escuchar por conexiones
+    app.listen(process.env.API_PORT)
+  }).catch(error => {
     console.error('No fue posible conectarse a la base de datos', error)
   })
