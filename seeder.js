@@ -30,7 +30,9 @@ for (let numeroDeIteracion = 0; numeroDeIteracion < 10; numeroDeIteracion++) {
     users.push({
         name: faker.name.findName(),
         email: faker.internet.email(),
-        password: userPassword
+        password: userPassword,
+        mfaEnabled: false, 
+        mfaSecret: ''
     })
 }
 

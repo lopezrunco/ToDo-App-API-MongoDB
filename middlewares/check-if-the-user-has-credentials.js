@@ -10,6 +10,13 @@ module.exports = (request, response, next) => {
     try {
         // Valida que el token enviado por el usuario sea correcto
         const decoded = jwt.verify(token, process.env.JWT_KEY)
+
+        // Inserta los datos del usuario en la request
+        request.user = {
+            id: decoded.id,
+            name: decoded.name,
+            email: decoded.email
+        }
         
         // Se invoca al siguiente middleware
         next()

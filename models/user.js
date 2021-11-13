@@ -15,5 +15,13 @@ module.exports = model('users', new Schema({
         type: String,
         required: true,
         trim: true
+    },
+    mfaEnabled: {
+        type: Boolean,
+        required: false
+    },
+    mfaSecret: {
+        type: String,
+        required: false
     }
 }))

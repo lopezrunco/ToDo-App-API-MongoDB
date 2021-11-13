@@ -34,6 +34,7 @@ app.use(express.json())
 // Users
 const login = require('./controllers/user/login')
 const register = require('./controllers/user/register')
+const enableMfa = require('./controllers/user/enable-mfa')
 const getAllUsers = require('./controllers/user/get-all')
 
 // Todos
@@ -48,6 +49,7 @@ const updateTodo = require('./controllers/todos/update')
 // Users (Loguear y registrar usuarios en el sistema)
 app.post('/login', login)
 app.post('/registro', register)
+app.get('/mfa', checkIfTheUserHasCredentials, enableMfa)  // Esta retorna retorna el QR para mostrar al usuario
 app.get('/admin/users', checkIfTheUserHasCredentials, getAllUsers)
 
 // Todos
