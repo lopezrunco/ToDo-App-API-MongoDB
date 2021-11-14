@@ -24,3 +24,12 @@ npm run seed
 # Iniciar API
 npm start
 ```
+
+## Testing
+```bash
+# Correr pruebas unitarias
+npm run test
+
+# Correr pruebas unitarias y generar reporte de coverage
+npm run test:coverage
+```
