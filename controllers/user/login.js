@@ -5,7 +5,7 @@ const userModel = require('../../models/user')
 
 const returnCredentials = (user, response) => {
     // Elimino campos que no quiero mostrar en la respuesta
-    const userWithoutPassword = user.toObject()
+    const userWithoutPassword = user.toJSON()
 
     delete userWithoutPassword.password
     delete userWithoutPassword.mfaEnabled

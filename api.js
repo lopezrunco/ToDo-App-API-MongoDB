@@ -1,10 +1,12 @@
 // Carga todas las variables de entorno usando la biblioteca dotenv
 require('dotenv').config()
 
-
 const mongoose = require('mongoose') // Mongoose (equivalente a Sequelize) es un mapeador para mongoDB
+const mongooseToJson = require('@meanie/mongoose-to-json') // Este plugin limpieza las request en los campos _id y __v
 const express = require('express')
 const cors = require('cors')
+
+mongoose.plugin(mongooseToJson) // Carga del plugin mongoosetojson en mongoose
 
 // Conexion a base de datos ---------------------------------------------------------------------------- //
 // Dependiendo de si hay usuario y password crea un string, si no, otro
