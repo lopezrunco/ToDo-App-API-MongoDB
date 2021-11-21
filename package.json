@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "nodemon api.js",
+    "debug": "nodemon --inspect api.js",
     "seed": "node seeder.js",
     "test": "jest",
     "test:coverage": "jest --coverage"

@@ -33,3 +33,7 @@ npm run test
 # Correr pruebas unitarias y generar reporte de coverage
 npm run test:coverage
 ```
+
+## Debugging
+El repo está configurado para utilizar Visual Studio Code como herramienta para depurar.
+Por mas info: https://code.visualstudio.com/docs/nodejs/nodejs-debugging
