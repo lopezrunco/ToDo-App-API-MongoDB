@@ -24,6 +24,7 @@ const app = express()
 // Middlewares ---------------------------------------------------------------------------------------- //
 
 const checkIfTheUserHasCredentials = require('./middlewares/check-if-the-user-has-credentials')
+const checkUserRole = require('./middlewares/check-user-role')
 
 // Cors retorna una funcion middleware que abre la API en terminos de seguridad, para poder conectarnos con el front-end al desarrollar (Permite conexiones entre una misma IP)
 app.use(cors())
@@ -52,7 +53,7 @@ const updateTodo = require('./controllers/todos/update')
 app.post('/login', login)
 app.post('/registro', register)
 app.get('/mfa', checkIfTheUserHasCredentials, enableMfa)  // Esta retorna retorna el QR para mostrar al usuario
-app.get('/admin/users', checkIfTheUserHasCredentials, getAllUsers)
+app.get('/admin/users', checkIfTheUserHasCredentials, checkUserRole(['ADMIN']), getAllUsers)
 
 // Todos
 app.get('/todos', checkIfTheUserHasCredentials, getAllTodos)

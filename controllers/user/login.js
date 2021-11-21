@@ -15,7 +15,8 @@ const returnCredentials = (user, response) => {
     userWithoutPassword.token = jwt.sign({
         id: user._id,
         name: user.name,
-        email: user.email
+        email: user.email,
+        role: user.role // Cuando se loguea el usuario, se retorna el rol dentro del token hacia el front end 
     }, process.env.JWT_KEY, { expiresIn: '1h' })
 
     // Retornamos el usuario

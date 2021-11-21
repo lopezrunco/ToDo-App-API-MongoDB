@@ -32,7 +32,8 @@ for (let numeroDeIteracion = 0; numeroDeIteracion < 10; numeroDeIteracion++) {
         email: faker.internet.email(),
         password: userPassword,
         mfaEnabled: false, 
-        mfaSecret: ''
+        mfaSecret: '',
+        role: numeroDeIteracion === 0 ? 'ADMIN' : 'BASIC'   // El primer usuario sera ADMIN, el resto seran BASIC
     })
 }
 

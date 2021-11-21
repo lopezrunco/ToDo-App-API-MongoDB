@@ -15,7 +15,8 @@ module.exports = (request, response, next) => {
         request.user = {
             id: decoded.id,
             name: decoded.name,
-            email: decoded.email
+            email: decoded.email,
+            role: decoded.role
         }
         
         // Se invoca al siguiente middleware

@@ -44,6 +44,7 @@ module.exports = (request, response) => {
             password: user.password,
             email: user.email,
             name: user.name,
+            role: 'BASIC'       // Al registrarse un usuario, por defecto es BASIC
         }).then(user => {
 
             // Se obtiene el usuario de forma plana
@@ -56,7 +57,8 @@ module.exports = (request, response) => {
             userWithoutPassword.token = jwt.sign({
                 id: userWithoutPassword._id,
                 name: userWithoutPassword.name,
-                email: userWithoutPassword.email
+                email: userWithoutPassword.email,
+                role: userWithoutPassword.role              // La informacion del rol tambien viaja en el token al front end
             }, process.env.JWT_KEY, { expiresIn: '1h' })
 
             // Se retorna la informacion de usuario sin la password
