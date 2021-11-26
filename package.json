@@ -2,9 +2,9 @@
   "name": "todos-api-mongodb",
   "version": "1.0.0",
   "scripts": {
-    "start": "nodemon api.js",
-    "debug": "nodemon --inspect api.js",
-    "seed": "node seeder.js",
+    "start": "nodemon src/api.js",
+    "debug": "nodemon --inspect src/api.js",
+    "seed": "node src/commands/seeder.js",
     "test": "jest",
     "test:coverage": "jest --coverage"
   },

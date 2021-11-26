@@ -5,17 +5,10 @@ require('dotenv').config()
 const bcrypt = require('bcrypt')
 const faker = require('faker')
 const mongoose = require('mongoose')
+const getDbConnectionString = require('../utils/get-db-connection-string') // Funcion que retorna el string de conexion
 
 // Importacion del modelo a utilizar
-const { userModel } = require('./models/user')
-
-// Connection string para conectarse a la base de datos
-let databaseConnectionString
-if (process.env.DB_USER && process.env.DB_PASSWORD) {
-    databaseConnectionString = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}/${process.env.DB_NAME}?retryWrites=true&w=majority`
-} else {
-    databaseConnectionString = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`
-}
+const { userModel } = require('../models/user')
 
 // Declaracion de las listas de documentos a insertar en las colecciones
 const users = []
@@ -56,7 +49,7 @@ console.log('Se van a insertar:')
 console.log(`${users.length} Usuarios`)
 
 // Conexion a la base de datos
-mongoose.connect(databaseConnectionString, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(getDbConnectionString(), { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         // Promise.all acepta una coleccion de promesas
         Promise.all([

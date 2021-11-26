@@ -5,17 +5,11 @@ const mongoose = require('mongoose') // Mongoose (equivalente a Sequelize) es un
 const mongooseToJson = require('@meanie/mongoose-to-json') // Este plugin limpieza las request en los campos _id y __v
 const express = require('express')
 const cors = require('cors')
+const getDbConnectionString = require('./utils/get-db-connection-string') // Funcion que retorna el string de conexion
+
+// Configuracion de plugins para la base de datos ---------------------------------------------------------------------------- //
 
 mongoose.plugin(mongooseToJson) // Carga del plugin mongoosetojson en mongoose
-
-// Conexion a base de datos ---------------------------------------------------------------------------- //
-// Dependiendo de si hay usuario y password crea un string, si no, otro
-let databaseConnectionString
-if (process.env.DB_USER && process.env.DB_PASSWORD) {
-    databaseConnectionString = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}/${process.env.DB_NAME}?retryWrites=true&w=majority`
-} else {
-    databaseConnectionString = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`
-}
  
 // Creacion de app express ---------------------------------------------------------------------------- //
 
@@ -63,7 +57,7 @@ app.delete('/todos/:id', checkIfTheUserHasCredentials, deleteTodo)
 app.put('/todos/:id', checkIfTheUserHasCredentials, updateTodo)
 
 // Usa las credenciales del string definido arriba para conectar
-mongoose.connect(databaseConnectionString, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(getDbConnectionString(), { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     // Comenzar a escuchar por conexiones
     app.listen(process.env.API_PORT)
