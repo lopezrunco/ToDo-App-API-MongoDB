@@ -22,7 +22,7 @@ npm i
 npm run seed
 
 # Iniciar API
-npm start
+npm run dev
 ```
 
 ## Testing
