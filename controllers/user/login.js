@@ -1,19 +1,20 @@
 const bcrypt = require('bcrypt')
 const otplib = require('otplib')
 const jwt = require('jsonwebtoken')
-const userModel = require('../../models/user')
+const { userModel } = require('../../models/user')
 
 const returnCredentials = (user, response) => {
     // Elimino campos que no quiero mostrar en la respuesta
     const userWithoutPassword = user.toJSON()
 
+    delete userWithoutPassword.todos
     delete userWithoutPassword.password
     delete userWithoutPassword.mfaEnabled
     delete userWithoutPassword.mfaSecret
 
     // Agregamos token de usuario
     userWithoutPassword.token = jwt.sign({
-        id: user._id,
+        id: user.id,
         name: user.name,
         email: user.email,
         role: user.role // Cuando se loguea el usuario, se retorna el rol dentro del token hacia el front end 

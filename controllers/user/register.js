@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken')
 const Joi = require('joi')
 
 // Importamos el modelo de usuario
-const userModel = require('../../models/user')
+const { userModel } = require('../../models/user')
 
 module.exports = (request, response) => {
 
@@ -44,18 +44,20 @@ module.exports = (request, response) => {
             password: user.password,
             email: user.email,
             name: user.name,
+            todos: [],
             role: 'BASIC'       // Al registrarse un usuario, por defecto es BASIC
         }).then(user => {
 
             // Se obtiene el usuario de forma plana
             const userWithoutPassword = user.toObject()
 
-            // Se borra la password
+            // Se borran los datos que no se mostraran en la respuesta
+            delete userWithoutPassword.todos
             delete userWithoutPassword.password
 
             // Agregamos token de usuario
             userWithoutPassword.token = jwt.sign({
-                id: userWithoutPassword._id,
+                id: userWithoutPassword.id,
                 name: userWithoutPassword.name,
                 email: userWithoutPassword.email,
                 role: userWithoutPassword.role              // La informacion del rol tambien viaja en el token al front end

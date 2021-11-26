@@ -1,9 +1,9 @@
-const todoModel = require('../../models/todo')
+const { userModel } = require('../../models/user')
 
 module.exports = (request, response) => {
 
     // Definicion de una paginacion por defecto
-    let pagination = {
+    const pagination = {
         offset: 0,
         limit: 10
     }
@@ -14,23 +14,24 @@ module.exports = (request, response) => {
             pagination.limit = parseInt(request.query.itemsPerPage)
     }
 
-    // Lista todos las tareas y responde mostrandolas en la UI
-    todoModel
-        .find()
-        .skip(pagination.offset)
+    // Lista todas las tareas del usuario logueado en la UI
+    userModel
+        .findOne({ _id: request.user.id })    // Accede al usuario segun el ID inyectado en el middleware checkIfTheUserHasCredentials
+        .select(['todos'])                  // Para el usuario logueado, selecciona los todos
+        .skip(pagination.offset)            // Aplica paginacion
         .limit(pagination.limit)
-        .then(todos => {
-            todoModel.
-                count()
+        .then(user => {
+            userModel
+                .count()                     // TODO: Para este usuario en particular, contar el largo del array de tareas
                 .then(count => {
                     const meta = {
                         count
                     }
 
-                    // Responde al front end con el numero de tareas y las tareas en si
+                    // Responde al front end con el numero de tareas del usuario y las tareas en si
                     response.status(200).json({
                         meta,
-                        todos
+                        todos: user.todos
                     })
                 }).catch(error => {
                     console.error(error)

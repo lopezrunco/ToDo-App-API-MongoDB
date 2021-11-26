@@ -1,6 +1,6 @@
-const { model, Schema } = require('mongoose')
+const { Schema } = require('mongoose')
 
-module.exports = model('todos', new Schema({
+const todoSchema = new Schema({
     title: {
         type: String,
         required: true,
@@ -20,4 +20,8 @@ module.exports = model('todos', new Schema({
         type: Boolean,
         required: false
     }
-}))
+})
+
+module.exports = {
+    todoSchema
+}
