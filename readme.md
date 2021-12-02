@@ -5,7 +5,7 @@
 Crear el archivo .env con variables de entorno
 
 ```bash
-API_PORT=3000
+PORT=3000
 JWT_KEY=super_secret_key
 DB_HOST=localhost
 DB_PORT=3306

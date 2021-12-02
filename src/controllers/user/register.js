@@ -1,10 +1,9 @@
 // Importacion de las bibliotecas bcrypt y Joi
 const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
 const Joi = require('joi')
-
-// Importamos el modelo de usuario
+const createToken = require('../../utils/create-token')
 const { userModel } = require('../../models/user')
+const { CONSUMER_TOKEN_TYPE, REFRESH_TOKEN_TYPE } = require('../../utils/token-types')
 
 module.exports = (request, response) => {
 
@@ -56,12 +55,10 @@ module.exports = (request, response) => {
             delete userWithoutPassword.password
 
             // Agregamos token de usuario
-            userWithoutPassword.token = jwt.sign({
-                id: userWithoutPassword.id,
-                name: userWithoutPassword.name,
-                email: userWithoutPassword.email,
-                role: userWithoutPassword.role              // La informacion del rol tambien viaja en el token al front end
-            }, process.env.JWT_KEY, { expiresIn: '1h' })
+            userWithoutPassword.token = createToken(user, CONSUMER_TOKEN_TYPE, '20m')
+
+            // Agregamos refresh token de usuario
+            userWithoutPassword.refreshToken = createToken(user, REFRESH_TOKEN_TYPE, '2d')
 
             // Se retorna la informacion de usuario sin la password
             response.json({

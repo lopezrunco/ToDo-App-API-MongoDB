@@ -1,7 +1,8 @@
 const bcrypt = require('bcrypt')
 const otplib = require('otplib')
-const jwt = require('jsonwebtoken')
+const createToken = require('../../utils/create-token')
 const { userModel } = require('../../models/user')
+const { CONSUMER_TOKEN_TYPE, REFRESH_TOKEN_TYPE } = require('../../utils/token-types')
 
 const returnCredentials = (user, response) => {
     // Elimino campos que no quiero mostrar en la respuesta
@@ -13,12 +14,10 @@ const returnCredentials = (user, response) => {
     delete userWithoutPassword.mfaSecret
 
     // Agregamos token de usuario
-    userWithoutPassword.token = jwt.sign({
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: user.role // Cuando se loguea el usuario, se retorna el rol dentro del token hacia el front end 
-    }, process.env.JWT_KEY, { expiresIn: '1h' })
+    userWithoutPassword.token = createToken(user, CONSUMER_TOKEN_TYPE, '20m')
+
+    // Agregamos refresh token de usuario
+    userWithoutPassword.refreshToken = createToken(user, REFRESH_TOKEN_TYPE, '2d')
 
     // Retornamos el usuario
     response.json({
