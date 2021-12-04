@@ -52,7 +52,7 @@ app.get('/auth/refresh', checkUserCredentials('REFRESH'), refresh)
 
 // Users (Loguear y registrar usuarios en el sistema)
 app.post('/login', login)
-app.post('/registro', register)
+app.post('/register', register)
 app.get('/admin/users', checkUserCredentials(), checkUserRole(['ADMIN']), getAllUsers)
 
 // Todos

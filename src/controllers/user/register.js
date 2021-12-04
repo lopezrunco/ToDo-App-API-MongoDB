@@ -17,7 +17,6 @@ module.exports = (request, response) => {
             .alphanum()
             .required(),
         password: Joi.string()
-            .alphanum()
             .min(7)
             .max(50)
             .required(),
