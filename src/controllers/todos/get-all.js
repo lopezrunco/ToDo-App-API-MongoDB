@@ -7,17 +7,16 @@ module.exports = (request, response) => {
         offset: 0,
         limit: 10
     }
-
-    // Si vienen valores asignaos por el usuario, los asignamos a la paginacion, si no, se asignan los valores por defecto
+    // Si vienen valores asignados por el usuario, los asignamos a la paginacion, si no, se asignan los valores por defecto
     if (request.query.page && request.query.itemsPerPage) {
         pagination.offset = (request.query.page - 1) * request.query.itemsPerPage,
-            pagination.limit = parseInt(request.query.itemsPerPage)
+        pagination.limit = parseInt(request.query.itemsPerPage)
     }
 
     // Lista todas las tareas del usuario logueado en la UI
     userModel
         .findOne({ _id: request.user.id })    // Accede al usuario segun el ID inyectado en el middleware checkIfTheUserHasCredentials
-        .select(['todos'])                  // Para el usuario logueado, selecciona los todos
+        .select('todos')                  // Para el usuario logueado, selecciona los todos
         .skip(pagination.offset)            // Aplica paginacion
         .limit(pagination.limit)
         .then(user => {
