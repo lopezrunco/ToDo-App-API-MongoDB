@@ -36,6 +36,7 @@ const refresh = require('./controllers/auth/refresh')
 const login = require('./controllers/user/login')
 const register = require('./controllers/user/register')
 const getAllUsers = require('./controllers/user/get-all')
+const getUserById = require('./controllers/user/get-by-id')
 
 // Todos
 const getAllTodos = require('./controllers/todos/get-all')
@@ -50,10 +51,11 @@ const updateTodo = require('./controllers/todos/update')
 app.get('/auth/mfa', checkUserCredentials(), enableMfa)  // Retorna el QR para mostrar al usuario
 app.get('/auth/refresh', checkUserCredentials('REFRESH'), refresh)
 
-// Users (Loguear y registrar usuarios en el sistema)
+// Users (Loguear, registrar y listar usuarios en el sistema)
 app.post('/login', login)
 app.post('/register', register)
 app.get('/admin/users', checkUserCredentials(), checkUserRole(['ADMIN']), getAllUsers)
+app.get('/admin/users/:id', checkUserCredentials(), checkUserRole(['ADMIN']), getUserById)
 
 // Todos
 app.get('/todos', checkUserCredentials(), getAllTodos)

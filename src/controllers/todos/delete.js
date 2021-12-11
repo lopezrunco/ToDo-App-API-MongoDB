@@ -1,32 +1,26 @@
-const todoModel = require('../../models/todo')
+const { userModel } = require('../../models/user')
 
-module.exports = (sequelize) => {
-    return (request, response) => {
+module.exports = (request, response) => {
+    userModel
+        .findOne({ _id: request.user.id })              // Encuentra el usuario logueado con el id que viene en el request
+        .then(user => {
+            user.todos.id(request.params.id).remove()   // Al objeto que tiene el id indicado se lo elimina (el id viene en los parametros de la url)
 
-        // Se llama la funcion destroy pasando el id que viene en los parametros
-        todoModel(sequelize).destroy({
-            where: {
-                id: request.params.id
-            }
-        }).then(deletedRows => {
+            user.save().then(() => {                    // Guarda el estado actual del modelo (basicamente el modelo menos la todo que se elimino)
+                response.status(200).end()
+            }).catch(error => {
+                console.error(error)
 
-            // deletedRows son los registros afectados por la consulta
-            // si no se afecto ningun registro, quiere decir que no se encontro la tarea eliminar
-            if (deletedRows > 0) {
-                response.json({
-                    message: 'Tarea eliminada'
+                response.status(500).json({
+                    message: 'Error al intentar eliminar la tarea'
                 })
-            } else {
-                response.status(404).json({
-                    message: 'No se encontro la tarea a eliminar'
-                })
-            }
+
+            })
         }).catch(error => {
             console.error(error)
 
             response.status(500).json({
-                message: 'Error al intentar borrar la tarea'
+                message: 'Error al intentar eliminar la tarea'
             })
         })
-    }
 }
