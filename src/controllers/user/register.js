@@ -52,6 +52,7 @@ module.exports = (request, response) => {
             // Se borran los datos que no se mostraran en la respuesta
             delete userWithoutPassword.todos
             delete userWithoutPassword.password
+            delete userWithoutPassword.mfaSecret
 
             // Agregamos token de usuario
             userWithoutPassword.token = createToken(user, CONSUMER_TOKEN_TYPE, '20m')

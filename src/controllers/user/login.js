@@ -10,7 +10,6 @@ const returnCredentials = (user, response) => {
 
     delete userWithoutPassword.todos
     delete userWithoutPassword.password
-    delete userWithoutPassword.mfaEnabled
     delete userWithoutPassword.mfaSecret
 
     // Agregamos token de usuario

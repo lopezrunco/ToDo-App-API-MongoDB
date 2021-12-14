@@ -1,7 +1,7 @@
 const otplib = require('otplib')
 const qrcode = require('qrcode')
 const crypto = require('crypto')
-const userModel = require('../../models/user')
+const { userModel } = require('../../models/user')
 
 otplib.authenticator.options = { crypto }
 
