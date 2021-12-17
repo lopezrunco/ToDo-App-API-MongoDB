@@ -45,6 +45,13 @@ const createTodo = require('./controllers/todos/create')
 const deleteTodo = require('./controllers/todos/delete')
 const updateTodo = require('./controllers/todos/update')
 
+// Events
+const createEvent = require('./controllers/events/create')
+const getLoginEvents = require('./controllers/events/get-login-events')
+const getLoginEventsCount = require('./controllers/events/get-login-events-count')
+const getRegisterEvents = require('./controllers/events/get-register-events')
+const getRegisterEventsCount = require('./controllers/events/get-register-events-count')
+
 // Definicion de rutas -------------------------------------------------------------------------------- //
 
 // Security
@@ -63,6 +70,13 @@ app.get('/todos/:id', checkUserCredentials(), getTodoById)
 app.post('/todos', checkUserCredentials(), createTodo)
 app.delete('/todos/:id', checkUserCredentials(), deleteTodo)
 app.put('/todos/:id', checkUserCredentials(), updateTodo)
+
+// Stats
+app.post('/events', checkUserCredentials(), createEvent)
+app.get('/stats/events/login', checkUserCredentials(), getLoginEvents)
+app.get('/stats/events/login/count', checkUserCredentials(), getLoginEventsCount)
+app.get('/stats/events/register', checkUserCredentials(), getRegisterEvents)
+app.get('/stats/events/register/count', checkUserCredentials(), getRegisterEventsCount)
 
 // Usa las credenciales del string definido arriba para conectar
 mongoose.connect(getDbConnectionString(), { useNewUrlParser: true, useUnifiedTopology: true })

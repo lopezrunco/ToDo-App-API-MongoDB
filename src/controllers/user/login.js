@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt')
 const otplib = require('otplib')
 const createToken = require('../../utils/create-token')
+const storeEvent = require('../../utils/store-event')
+const eventTypes = require('../../models/event-types')
 const { userModel } = require('../../models/user')
 const { CONSUMER_TOKEN_TYPE, REFRESH_TOKEN_TYPE } = require('../../utils/token-types')
 
@@ -17,6 +19,13 @@ const returnCredentials = (user, response) => {
 
     // Agregamos refresh token de usuario
     userWithoutPassword.refreshToken = createToken(user, REFRESH_TOKEN_TYPE, '2d')
+
+    // Creamos evento de LOGIN
+    // Cuando un usuario se loguee se guardara el evento en la base de datos
+    storeEvent({
+        type: eventTypes.LOGIN,
+        context: { id: user.id }
+    }).then().catch(error => { console.error(error) })
 
     // Retornamos el usuario
     response.json({

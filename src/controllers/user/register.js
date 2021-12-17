@@ -2,6 +2,8 @@
 const bcrypt = require('bcrypt')
 const Joi = require('joi')
 const createToken = require('../../utils/create-token')
+const storeEvent = require('../../utils/store-event')
+const eventTypes = require('../../models/event-types')
 const { userModel } = require('../../models/user')
 const { CONSUMER_TOKEN_TYPE, REFRESH_TOKEN_TYPE } = require('../../utils/token-types')
 
@@ -59,6 +61,13 @@ module.exports = (request, response) => {
 
             // Agregamos refresh token de usuario
             userWithoutPassword.refreshToken = createToken(user, REFRESH_TOKEN_TYPE, '2d')
+
+            // Creamos evento de REGISTRO
+            // Cuando un usuario se registre se guardara el evento en la base de datos
+            storeEvent({
+                type: eventTypes.REGISTER,
+                context: { id: user.id }
+            }).then().catch(error => { console.error(error) })
 
             // Se retorna la informacion de usuario sin la password
             response.json({
