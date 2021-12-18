@@ -47,10 +47,16 @@ const updateTodo = require('./controllers/todos/update')
 
 // Events
 const createEvent = require('./controllers/events/create')
-const getLoginEvents = require('./controllers/events/get-login-events')
-const getLoginEventsCount = require('./controllers/events/get-login-events-count')
-const getRegisterEvents = require('./controllers/events/get-register-events')
-const getRegisterEventsCount = require('./controllers/events/get-register-events-count')
+const getGroupedEvents = require('./controllers/events/get-grouped-events')
+const getLoginRegisterGroupedEvents = require('./controllers/events/get-grouped-login-register-events')
+const getLoginEventsInOverTime = require('./controllers/events/login/get-login-events-in-over-time')
+const getLoginEvents = require('./controllers/events/login/get-login-events')
+const getLoginEventsCount = require('./controllers/events/login/get-login-events-count')
+const getRegisterEventsInOverTime = require('./controllers/events/register/get-register-events-in-over-time')
+const getRegisterEvents = require('./controllers/events/register/get-register-events')
+const getRegisterEventsCount = require('./controllers/events/register/get-register-events-count')
+
+const getNavigationEventsInOverTime = require('./controllers/events/navigation/get-navigation-events-in-over-time')
 
 // Definicion de rutas -------------------------------------------------------------------------------- //
 
@@ -73,10 +79,19 @@ app.put('/todos/:id', checkUserCredentials(), updateTodo)
 
 // Stats
 app.post('/events', checkUserCredentials(), createEvent)
+
 app.get('/stats/events/login', checkUserCredentials(), getLoginEvents)
 app.get('/stats/events/login/count', checkUserCredentials(), getLoginEventsCount)
+
 app.get('/stats/events/register', checkUserCredentials(), getRegisterEvents)
 app.get('/stats/events/register/count', checkUserCredentials(), getRegisterEventsCount)
+
+app.get('/stats/events/grouped', checkUserCredentials(), getGroupedEvents)
+app.get('/stats/events/grouped/login-register', checkUserCredentials(), getLoginRegisterGroupedEvents)
+
+app.get('/stats/events/login/in-over-time', checkUserCredentials(), getLoginEventsInOverTime)
+app.get('/stats/events/register/in-over-time', checkUserCredentials(), getRegisterEventsInOverTime)
+app.get('/stats/events/navigation/in-over-time', checkUserCredentials(), getNavigationEventsInOverTime)
 
 // Usa las credenciales del string definido arriba para conectar
 mongoose.connect(getDbConnectionString(), { useNewUrlParser: true, useUnifiedTopology: true })

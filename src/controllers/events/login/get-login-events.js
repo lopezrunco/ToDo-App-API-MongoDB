@@ -1,5 +1,5 @@
-const eventTypes = require('../../models/event-types')
-const { eventModel } = require('../../models/event')
+const eventTypes = require('../../../models/event-types')
+const { eventModel } = require('../../../models/event')
 
 // Retorna todos los eventos de tipo LOGIN
 module.exports = (request, response) => {

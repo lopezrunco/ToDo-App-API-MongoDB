@@ -1,11 +1,10 @@
-const eventTypes = require('../../models/event-types')
-const { eventModel } = require('../../models/event')
+const eventTypes = require('../../../models/event-types')
+const { eventModel } = require('../../../models/event')
 
-// Retorna todos los eventos de tipo REGISTER
+// Retorna la cantidad de eventos de tipo LOGIN
 module.exports = (request, response) => {
     eventModel
-        .find({ type: eventTypes.REGISTER })
-        .select('-_id -context -type')
+        .count({ type: eventTypes.LOGIN })
         .then(events => {
             response.status(200).json({
                 events
