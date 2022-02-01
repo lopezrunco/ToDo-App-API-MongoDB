@@ -6,8 +6,11 @@ module.exports = (request, response) => {
         .then(user => {
             user.todos.push(request.body)
 
-            user.save().then(() => {
-                response.status(201).end()
+            user.save()
+            .then(() => {
+                response.status(201).json({
+                    message: 'Tarea creada exitosamente!'
+                }).end()
             }).catch(error => {
                 console.error(error)
 

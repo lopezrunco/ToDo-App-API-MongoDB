@@ -13,7 +13,7 @@ const todoSchema = new Schema({
     },
     priority: {
         type: String,
-        required: true,
+        required: false,
         trim: true
     },
     completed: {
