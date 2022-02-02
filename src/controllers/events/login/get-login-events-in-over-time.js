@@ -4,20 +4,20 @@ const { eventModel } = require('../../../models/event')
 module.exports = (request, response) => {
     eventModel
         .aggregate([{
-            // Filtra por eventos de tipo LOGIN
+            // Filter by LOGIN events
             $match: {
                 type: eventTypes.LOGIN
             }
         }, {
             $group: {
                 _id: {
-                    // Convierte la fecha del campo date al formato Ymd (De esa forma se pueden agrupar (Se eliminan milisegundos, zona horaria, etc))
+                    // Transform date to YMD format, so they can be agrupated (Delete milsec, timezone, etc)
                     $dateToString: {
                         format: '%Y-%m-%d',
                         date: '$date'
                     }
                 },
-                // Suma un valor, lo que dara como resultado "En el dia XXX hubieron XXX logins"
+                // Add 1 value, wich results "On day XXX was XXX logins"
                 inTime: {
                     $sum: 1
                 }
@@ -29,19 +29,18 @@ module.exports = (request, response) => {
                 inTime: 1
             }
         }, {
-            // Ordena por fecha de forma ascendente
             $sort: {
                 date: 1
             }
         }])
         .then(events => {
-            // Este loop hace posible el overt time
-            // Itera por todos los eventos dia a dia que vienen y va sumando los eventos de LOGIN considerando el historico
+            // This loop makes possible the "over time"
+            // Loops the events day by day and adds LOGIN events considering the historic
             for (let i = 0; i < events.length; i++) {
                 if (events[i - 1]) {
-                    events[i].overTime = events[i].inTime + events[i - 1].overTime  // Va seteando en .overTime los eventos del dia actual mas los historicos del anterior
+                    events[i].overTime = events[i].inTime + events[i - 1].overTime  // Sets in .overTime the events of actual day adding the history events of the previous day
                 } else {
-                    events[i].overTime = events[i].inTime   // Si cae aqui quiere decir que es el primer evento de la lista
+                    events[i].overTime = events[i].inTime   // If comes here, means this is the first event of the list
                 }
             }
 
@@ -52,7 +51,7 @@ module.exports = (request, response) => {
             console.error(error)
 
             response.status(500).json({
-                message: 'Error al intentar obtener estadisticas'
+                message: 'Error trying to obtain stats'
             })
         })
 }

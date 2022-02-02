@@ -5,7 +5,7 @@ module.exports = (request, response) => {
     eventModel
         .aggregate([{
             $match: {
-                // Filtra eventos de tipo NAVIGATION
+                // Filtra by NAVIGATION events
                 type: eventTypes.NAVIGATION
             }
         }, {
@@ -47,7 +47,7 @@ module.exports = (request, response) => {
             console.error(error)
 
             response.status(500).json({
-                message: 'Error al intentar obtener estadisticas'
+                message: 'Error trying to obtain stats'
             })
         })
 }

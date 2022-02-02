@@ -2,17 +2,17 @@ const { userModel } = require('../../models/user')
 
 module.exports = (request, response) => {
     userModel
-        .findOne({ _id: request.user.id })              // Encuentra el usuario logueado con el id que viene en el request
+        .findOne({ _id: request.user.id })
         .then(user => {
-            user.todos.id(request.params.id).remove()   // Al objeto que tiene el id indicado se lo elimina (el id viene en los parametros de la url)
+            user.todos.id(request.params.id).remove()
 
-            user.save().then(() => {                    // Guarda el estado actual del modelo (basicamente el modelo menos la todo que se elimino)
+            user.save().then(() => {
                 response.status(200).end()
             }).catch(error => {
                 console.error(error)
 
                 response.status(500).json({
-                    message: 'Error al intentar eliminar la tarea'
+                    message: 'Error trying to delete the todo'
                 })
 
             })
@@ -20,7 +20,7 @@ module.exports = (request, response) => {
             console.error(error)
 
             response.status(500).json({
-                message: 'Error al intentar eliminar la tarea'
+                message: 'Error trying to delete the todo'
             })
         })
 }

@@ -1,7 +1,7 @@
 const eventTypes = require('../../../models/event-types')
 const { eventModel } = require('../../../models/event')
 
-// Retorna la cantidad de eventos de tipo LOGIN
+// Return the number of LOGIN events
 module.exports = (request, response) => {
     eventModel
         .count({ type: eventTypes.LOGIN })
@@ -14,7 +14,7 @@ module.exports = (request, response) => {
             console.error(error)
 
             response.status(500).json({
-                message: 'Error al intentar obtener estadisticas'
+                message: 'Error trying to obtain stats'
             })
         })
 }

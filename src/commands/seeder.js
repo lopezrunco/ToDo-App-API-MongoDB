@@ -10,17 +10,12 @@ const getDbConnectionString = require('../utils/get-db-connection-string') // Fu
 // Importacion del modelo a utilizar
 const { userModel } = require('../models/user')
 
-// Declaracion de las listas de documentos a insertar en las colecciones
 const users = []
-
-// Password que se utilizara en los usuarios a crear
 const userPassword = bcrypt.hashSync('super_super_secret', 2)
 
-// Genera una lista de usuarios haciendo uso de faker.js
 for (let numeroDeIteracion = 0; numeroDeIteracion < 10; numeroDeIteracion++) {
     const todos = []
 
-    // Genera una lista de todos haciendo uso de faker.js. Las mismas se generaran dentro de cada usuario
     for (let numeroDeIteracion = 0; numeroDeIteracion < faker.datatype.number(5); numeroDeIteracion++) {
         todos.push({
             title: faker.commerce.productName(),
@@ -34,32 +29,29 @@ for (let numeroDeIteracion = 0; numeroDeIteracion < 10; numeroDeIteracion++) {
         name: faker.name.findName(),
         email: faker.internet.email(),
         password: userPassword,
-        todos: todos,   // Se agregan las tareas al usuario
+        todos: todos,
         mfaEnabled: false, 
         mfaSecret: '',
-        role: numeroDeIteracion === 0 ? 'ADMIN' : 'BASIC'   // El primer usuario sera ADMIN, el resto seran BASIC
+        role: numeroDeIteracion === 0 ? 'ADMIN' : 'BASIC'   // First user is ADMIN, the others is BASIC
     })
 }
 
-// Muestra en la consola informacion sobre la inserción de datos
 console.log('------------------------------------------------------------------------')
 console.log('Seed de datos')
 console.log('------------------------------------------------------------------------')
 console.log('Se van a insertar:')
 console.log(`${users.length} Usuarios`)
 
-// Conexion a la base de datos
+// Conection to database
 mongoose.connect(getDbConnectionString(), { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
-        // Promise.all acepta una coleccion de promesas
+        // Promise.all acepts a collection of promises
         Promise.all([
-            // Inserta todos los usuarios y tareas
             userModel.insertMany(users)
         ]).then(() => {
-            // Una vez que terminan de insertarse todos los documentos, cierra la conexion a mongodb
             console.log('Listo!')
             mongoose.connection.close()
         })
     }).catch(error => {
-        console.error('No fue posible conectarse a la base de datos', error)
+        console.error('Could not connect to database', error)
     })

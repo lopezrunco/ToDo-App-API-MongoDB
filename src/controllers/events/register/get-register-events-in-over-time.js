@@ -4,7 +4,7 @@ const { eventModel } = require('../../../models/event')
 module.exports = (request, response) => {
     eventModel
         .aggregate([{
-            // Filtra por tipo de evento REGISTER
+            // Filtra by REGISTER events
             $match: {
                 type: eventTypes.REGISTER
             }
@@ -47,7 +47,7 @@ module.exports = (request, response) => {
             console.error(error)
 
             response.status(500).json({
-                message: 'Error al intentar obtener estadisticas'
+                message: 'Error trying to obtain stats'
             })
         })
 }

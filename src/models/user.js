@@ -1,7 +1,6 @@
 const { model, Schema } = require('mongoose')
-const { todoSchema } = require('./todo')        // Importa el esquema de las tareas
+const { todoSchema } = require('./todo')
 
-// Con este cambio, de ahora en adelante para acceder a las tareas, se debera hacerlo a traves del usuario
 const userSchema = new Schema({
     name: {
         type: String,
@@ -24,8 +23,8 @@ const userSchema = new Schema({
         trim: true
     },
     todos: {
-        type: [todoSchema],     // Se agrega el esquema de las tareas
-        default: () => ([])     // Si el usuario no tiene tareas, se agrega una lista vacia por defecto
+        type: [todoSchema],
+        default: () => ([])     // If the users does not have todos, add an empty list by default
     },
     mfaEnabled: {
         type: Boolean,

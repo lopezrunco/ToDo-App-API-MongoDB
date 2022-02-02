@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 
-// Retorna token o refresh token dependiendo de los parametros
+// Return token or refresh token depending the parameters
 module.exports = (user, tokenType, expiresIn) => {
     return jwt.sign({
         id: user.id,

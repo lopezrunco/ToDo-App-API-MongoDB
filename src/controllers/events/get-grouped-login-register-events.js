@@ -1,11 +1,10 @@
 const eventTypes = require('../../models/event-types')
 const { eventModel } = require('../../models/event')
 
-// Obtiene solo los eventos de tipo LOGIN o REGISTER, los cuenta y los agrupa por tipo
+// Obtain the LOGIN or REGISTER events, count them and group by type
 module.exports = (request, response) => {
     eventModel
         .aggregate([{
-            // Filtra por tipos de eventos LOGIN o REGISTER
             $match: {
                 $or: [
                     { type: eventTypes.LOGIN },
@@ -34,7 +33,7 @@ module.exports = (request, response) => {
             console.error(error)
 
             response.status(500).json({
-                message: 'Error al intentar obtener estadisticas'
+                message: 'Error trying to obtain stats'
             })
         })
 }

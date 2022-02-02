@@ -2,17 +2,17 @@ const { userModel } = require('../../models/user')
 
 module.exports = (request, response) => {
     userModel
-        .findOne({ _id: request.params.id })   // Encuentra el usuario con el id que viene en los parametros
-        .select('-password -todos -mfaSecret')  // Se excluyen campos
+        .findOne({ _id: request.params.id })
+        .select('-password -todos -mfaSecret')
         .then(user => {
             response.status(200).json({
-                user                            // Retorna el usuario
+                user
             })
         }).catch(error => {
             console.error(error)
 
             response.status(500).json({
-                message: 'Error al intentar obtener el usuario'
+                message: 'Error trying to obtain the user'
             })
         })
 }

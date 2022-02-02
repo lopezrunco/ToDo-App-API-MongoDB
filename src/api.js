@@ -1,17 +1,16 @@
-// Carga todas las variables de entorno usando la biblioteca dotenv
 require('dotenv').config()
 
-const mongoose = require('mongoose') // Mongoose (equivalente a Sequelize) es un mapeador para mongoDB
-const mongooseToJson = require('@meanie/mongoose-to-json') // Este plugin limpieza las request en los campos _id y __v
+const mongoose = require('mongoose')
+const mongooseToJson = require('@meanie/mongoose-to-json') // Cleans the requests on the fields _id and __v
 const express = require('express')
 const cors = require('cors')
-const getDbConnectionString = require('./utils/get-db-connection-string') // Funcion que retorna el string de conexion
+const getDbConnectionString = require('./utils/get-db-connection-string') // Return the conection string
 
-// Configuracion de plugins para la base de datos ---------------------------------------------------------------------------- //
+// Configuration of database plugins ---------------------------------------------------------------------------- //
 
-mongoose.plugin(mongooseToJson) // Carga del plugin mongoosetojson en mongoose
+mongoose.plugin(mongooseToJson)
  
-// Creacion de app express ---------------------------------------------------------------------------- //
+// Create app express ---------------------------------------------------------------------------- //
 
 const app = express()
 
@@ -20,13 +19,13 @@ const app = express()
 const checkUserCredentials = require('./middlewares/check-user-credentials')
 const checkUserRole = require('./middlewares/check-user-role')
 
-// Cors retorna una funcion middleware que abre la API en terminos de seguridad, para poder conectarnos con el front-end al desarrollar (Permite conexiones entre una misma IP)
+// Cors returns middleware function that opens the API in security terms, to connect the front-end (Allow conections between the same IP)
 app.use(cors())
 
-// Esta linea es para entender el JSON que se le envia a la API
+// Understand the JSON sended to the API
 app.use(express.json())
 
-// Carga de controladores ----------------------------------------------------------------------------- //
+// Controllers ----------------------------------------------------------------------------- //
 
 // Security
 const enableMfa = require('./controllers/auth/enable-mfa')
@@ -58,13 +57,13 @@ const getRegisterEventsCount = require('./controllers/events/register/get-regist
 
 const getNavigationEventsInOverTime = require('./controllers/events/navigation/get-navigation-events-in-over-time')
 
-// Definicion de rutas -------------------------------------------------------------------------------- //
+// Routes definition -------------------------------------------------------------------------------- //
 
 // Security
-app.get('/auth/mfa', checkUserCredentials(), enableMfa)  // Retorna el QR para mostrar al usuario
+app.get('/auth/mfa', checkUserCredentials(), enableMfa)
 app.get('/auth/refresh', checkUserCredentials('REFRESH'), refresh)
 
-// Users (Loguear, registrar y listar usuarios en el sistema)
+// Users
 app.post('/login', login)
 app.post('/register', register)
 app.get('/admin/users', checkUserCredentials(), checkUserRole(['ADMIN']), getAllUsers)
@@ -93,11 +92,10 @@ app.get('/stats/events/login/in-over-time', checkUserCredentials(), getLoginEven
 app.get('/stats/events/register/in-over-time', checkUserCredentials(), getRegisterEventsInOverTime)
 app.get('/stats/events/navigation/in-over-time', checkUserCredentials(), getNavigationEventsInOverTime)
 
-// Usa las credenciales del string definido arriba para conectar
+// Connect to database
 mongoose.connect(getDbConnectionString(), { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
-    // Comenzar a escuchar por conexiones
     app.listen(process.env.PORT)
   }).catch(error => {
-    console.error('No fue posible conectarse a la base de datos', error)
+    console.error('Could not connect to database', error)
   })

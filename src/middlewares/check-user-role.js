@@ -1,24 +1,20 @@
-// Se envuelve una funcion dentro de otra para poder pasar role como parametro
+// Wrap a function inside another to pass role as a parameter
 module.exports = (roles) => {
     return (request, response, next) => {
 
-        // Chequea si hay usuario
         if(request.user) {
-
-            // Chequea dentro de la lista de roles, si el rol del usuario coincide
             const roleMatches = roles.find(role => role === request.user.role)
 
-            // Si el usuario coincide, pasa al siguiente middleware
             if (roleMatches) {
                 next()
             } else {
                 return response.status(403).json({
-                    message: 'Acceso prohibido'
+                    message: 'Forbiden access'
                 })
             }
         } else {
             return response.status(401).json({
-                message: 'Credenciales invalidas'
+                message: 'Invalid credentials'
             })
         }
     }

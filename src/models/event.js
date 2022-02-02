@@ -4,8 +4,8 @@ const eventTypes = require("./event-types")
 const eventSchema = new Schema({
     type: {
         type: String,
-        enum: Object.values(eventTypes),    // Los valores son enumerados, o sea que puede ser cualquier de los que estan en eventTypes
-        default: eventTypes.GENERIC,        // GENERIC es el valor por defecto
+        enum: Object.values(eventTypes),    // The values are enumerated, means that can be anyone of the eventTypes
+        default: eventTypes.GENERIC,        // GENERIC is the value by default
         required: true
     },
     context: {

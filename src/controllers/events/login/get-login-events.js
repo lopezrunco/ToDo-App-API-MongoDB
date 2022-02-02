@@ -1,7 +1,7 @@
 const eventTypes = require('../../../models/event-types')
 const { eventModel } = require('../../../models/event')
 
-// Retorna todos los eventos de tipo LOGIN
+// Return LOGIN events
 module.exports = (request, response) => {
     eventModel
         .find({ type: eventTypes.LOGIN })
@@ -15,7 +15,7 @@ module.exports = (request, response) => {
             console.error(error)
 
             response.status(500).json({
-                message: 'Error al intentar obtener estadisticas'
+                message: 'Error trying to obtain stats'
             })
         })
 }

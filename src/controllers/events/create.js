@@ -1,15 +1,12 @@
-const Joi = require('joi')      // Con Joi se validara el tipo de informacion que guardara el evento
+const Joi = require('joi')
 const storeEvent = require('../../utils/store-event')
 const eventTypes = require('../../models/event-types')
 
-// Guarda el evento
+// Save the event
 module.exports = (request, response) => {
-    // Guardamos el evento que viene en la peticion
     const event = request.body
 
-    // Definicion de esquema a validar
     const schema = Joi.object({
-        // El type debe de estar dentro de los valores indicados en eventTypes
         type: Joi.string().valid(
             eventTypes.NAVIGATION,
             eventTypes.TODO_CREATED,
@@ -20,13 +17,12 @@ module.exports = (request, response) => {
             eventTypes.TOKEN_REFRESH,
             eventTypes.GENERIC
         ).required(),
-        // Informacion contextual que no es obligatoria
+        // No Mandatory contextual information
         context: Joi.any()
     })
 
     const validationResult = schema.validate(event)
 
-    // Si la validacion es exitosa, guarda el evento
     if (!validationResult.error) {
         storeEvent({ 
             ...event, 
@@ -40,7 +36,7 @@ module.exports = (request, response) => {
             console.error(error)
 
             response.status(500).json({
-                message: 'No se pudo registrar el evento'
+                message: 'Could not register the event'
             })
         })
     } else {

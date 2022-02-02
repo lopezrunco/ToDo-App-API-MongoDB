@@ -9,20 +9,20 @@ module.exports = (request, response) => {
             user.save()
             .then(() => {
                 response.status(201).json({
-                    message: 'Tarea creada exitosamente!'
+                    message: 'Todo created!'
                 }).end()
             }).catch(error => {
                 console.error(error)
 
                 response.status(500).json({
-                    message: 'Error al intentar crear una tarea'
+                    message: 'Error trying to create the todo'
                 })
             })
         }).catch(error => {
             console.error(error)
 
             response.status(500).json({
-                message: 'Error al intentar crear una tarea'
+                message: 'Error trying to create the todo'
             })
         })
 }
